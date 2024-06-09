@@ -1,0 +1,31 @@
+@font-face {
+  src: url('https://fonts.googleapis.com/css2?family=Baloo+2:wght@800&display=swap');
+  font-family: 'ExtraBold', cursive;
+}
+
+.page_top_banner {
+  height: 300px;
+  text-transform: uppercase;
+  font-size: 36px;
+  color: #d3b673;
+  letter-spacing: 1.8px;
+  font-family: ExtraBold;
+  font-weight: 900;
+  background:
+    linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)),
+    url(/banner_introduce.png) no-repeat center;
+  background-size: cover;
+  display: flex;
+  justify-content: center;
+  align-items: flex-end;
+  padding-bottom: 30px;
+  text-align: center;
+  padding-left: 10%;
+  padding-right: 10%;
+}
+
+.page_title {
+  // font-family: ExtraBold !important;
+  font-weight: 900;
+  font-size: 32px !important;
+}

@@ -1,0 +1,27 @@
+.overlay {
+  position: absolute;
+  top: 0px;
+  right: 0px;
+  left: 0px;
+  bottom: 0px;
+  background: rgba(0, 0, 0, 0.4);
+}
+.cursor {
+  background: url(/cursorl.webp) no-repeat center;
+  width: 18px;
+  height: 32px;
+  align-self: center;
+  position: relative;
+  animation: slide-up-down 0.5s infinite alternate;
+  margin: 32px auto 8px;
+  animation: slide-up-down 0.5s infinite alternate;
+}
+
+@keyframes slide-up-down {
+  0% {
+    top: 0;
+  }
+  100% {
+    top: -16px;
+  }
+}

@@ -1,0 +1,228 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+@import 'flatpickr/dist/flatpickr.css';
+@import 'flatpickr/dist/themes/material_green.css';
+
+@layer {
+  * {
+    font-family: 'Roboto', sans-serif;
+  }
+  //signin, signup
+  .background-container {
+    display: flex;
+    width: 100vw;
+    height: 100vh;
+    justify-content: center;
+    align-items: center;
+    background:
+      linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)),
+      url(/north_background_login_desktop.png) no-repeat center;
+    background-size: cover;
+  }
+
+  .background-content {
+    background-image: url(/register_banner_mobil.png);
+    background-repeat: no-repeat;
+    background-size: 100%;
+    background-position: bottom center;
+  }
+
+  .btn-shadow {
+    box-shadow: 0 3px 25px 0 rgba(0, 0, 0, 0.2);
+  }
+
+  .header {
+    box-shadow: 0 2px 10px 0 rgba(0, 0, 0, 0.06);
+  }
+
+  .sidebar {
+    box-shadow: 0 2px 7px 0 rgba(0, 0, 0, 0.05);
+  }
+  //Home
+  .container {
+    max-width: 1200px !important;
+  }
+
+  // Product
+  .cart-group-top {
+    transition: all 2s ease;
+    display: none;
+  }
+
+  .show_order {
+    display: block !important;
+  }
+
+  //my-account
+  .bg-top-account {
+    height: 180px;
+    display: block;
+    position: relative;
+    text-align: center;
+    background-color: #f1f1f1;
+    background-image: url(/background-account.png);
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+    width: 100%;
+  }
+
+  .account-avatar {
+    box-shadow: 2px 2px 15px 0 rgba(0, 0, 0, 0.2);
+    z-index: 2;
+  }
+
+  .account-content {
+    box-shadow: 1px -2px 5px 0 rgba(0, 0, 0, 0.2);
+  }
+
+  .btn-change-photo {
+    position: absolute;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    bottom: -8%;
+    height: 36px;
+    width: 36px;
+    border-radius: 50%;
+    left: 62%;
+    box-shadow: 2px 2px 15px 0 rgba(0, 0, 0, 0.2);
+    background: url(/camera-regular.svg) no-repeat center;
+    background-color: #ffffff;
+    background-size: 20px auto;
+    cursor: pointer;
+  }
+
+  .item-profile:nth-child(odd) {
+    padding-right: 15px;
+  }
+
+  .item-profile:nth-child(even) {
+    padding-left: 15px;
+  }
+
+  .voucher-item {
+    // display: flex;
+    // flex-direction: column;
+    background-color: #feef6e;
+    width: calc(25% - 15px);
+    padding: 6px 12px;
+    margin: 0 15px 15px 0;
+    border-radius: 4px;
+    border: 1px solid #e0e0e0;
+    box-shadow: 2px 2px 2px 0px #e0e0e0;
+    cursor: pointer;
+  }
+  // .list-voucher:hover .voucher-item:not(:hover){
+  //   filter: blur(3px);
+  // }
+  .voucher-item:hover {
+    background-color: #fff59a;
+  }
+  .center-slider {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    width: 100%;
+    transform: translate(-50%, -20%);
+  }
+
+  .bg_title {
+    background: url(./home_line.webp) no-repeat center;
+    width: 315px;
+    height: 30px;
+  }
+
+  body::-webkit-scrollbar,
+  .hidden-scroll-bar::-webkit-scrollbar {
+    display: none !important;
+  }
+
+  #scrollSize::-webkit-scrollbar {
+    width: 1px;
+  }
+
+  #scrollSize::-webkit-scrollbar-track {
+    box-shadow: inset 0 0 5px white;
+    border-radius: 10px;
+  }
+
+  #scrollSize::-webkit-scrollbar-thumb {
+    background: gray;
+    border-radius: 10px;
+  }
+
+  //slider
+  .slick-prev,
+  .slick-next {
+    width: 32px !important;
+    height: 32px !important;
+    z-index: 1 !important;
+    color: white !important;
+  }
+  .slick-prev {
+    left: 10% !important;
+  }
+  .slick-next {
+    right: 10% !important;
+  }
+
+  //Header-HomePage
+  @media only screen and (max-width: 767px) {
+    .menu {
+      position: fixed;
+      top: 0;
+      background: #292929c7;
+      width: 50vw;
+      height: 100vh;
+      border-left: 1px solid #f0f0f0;
+      right: -100%;
+      z-index: 3;
+      transition: all 0.5s ease;
+    }
+    .show__menu {
+      right: 0 !important;
+    }
+  }
+
+  .rotate {
+    /* transition: all; */
+    animation: rotate 1.5s infinite linear;
+  }
+
+  @keyframes rotate {
+    from {
+      transform: rotate(0deg);
+    }
+    to {
+      transform: rotate(360deg);
+    }
+  }
+}
+
+@layer utilities {
+  @variants responsive {
+    /* Hide scrollbar for Chrome, Safari and Opera */
+    .no-scrollbar::-webkit-scrollbar {
+      display: none;
+    }
+
+    /* Hide scrollbar for IE, Edge and Firefox */
+    .no-scrollbar {
+      -ms-overflow-style: none; /* IE and Edge */
+      scrollbar-width: none; /* Firefox */
+    }
+  }
+}
+
+.custom-input-forgotPass:focus {
+  outline: none !important;
+  box-shadow: none !important;
+}
+
+.styleSelecbox {
+  .ant-select-selector {
+    border: none !important;
+  }
+}

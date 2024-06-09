@@ -1,0 +1,72 @@
+.ant-steps.ant-steps-label-vertical .ant-steps-item-tail {
+  margin-inline-start: 69px;
+  padding: 4px 24px;
+}
+.ant-steps .ant-steps-item-finish > .ant-steps-item-container > .ant-steps-item-tail::after {
+  background-color: #2dc258;
+}
+
+// .ant-steps .ant-steps-item-icon .ant-steps-icon {
+//   position: relative;
+//   top: -0.5px;
+//   color: #2dc258;
+//   line-height: 1;
+// }
+.ant-steps .ant-steps-item-finish .ant-steps-item-icon > .ant-steps-icon {
+  color: #2dc258;
+}
+.ant-steps .ant-steps-item-tail {
+  position: absolute;
+  top: 20px;
+  inset-inline-start: 0;
+  width: 100%;
+}
+.ant-steps .ant-steps-item-icon {
+  width: 50px;
+  height: 50px;
+  margin-top: 0;
+  margin-bottom: 0;
+  margin-inline-start: 0;
+  margin-inline-end: 8px;
+  font-size: 24px;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, 'Noto Sans', sans-serif,
+    'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
+  line-height: 50px;
+  text-align: center;
+  border-radius: 50px;
+  border: 1px solid transparent;
+  transition:
+    background-color 0.3s,
+    border-color 0.3s;
+}
+.ant-steps .ant-steps-item-process .ant-steps-item-icon {
+  background-color: #2dc258;
+  border-color: transparent;
+}
+.ant-steps .ant-steps-item-tail::after {
+  display: inline-block;
+  width: 98%;
+  height: 3px;
+  background: rgba(5, 5, 5, 0.06);
+  border-radius: 1px;
+  transition: background 0.3s;
+  content: '';
+}
+
+.bg_image {
+  height: 0.1875rem;
+  width: 100%;
+  background-position-x: -1.875rem;
+  background-size: 7.25rem 0.1875rem;
+  background-image: repeating-linear-gradient(
+    45deg,
+    #6fa6d6,
+    #6fa6d6 33px,
+    transparent 0,
+    transparent 41px,
+    #f18d9b 0,
+    #f18d9b 74px,
+    transparent 0,
+    transparent 82px
+  );
+}

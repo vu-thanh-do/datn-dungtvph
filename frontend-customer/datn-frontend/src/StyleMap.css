@@ -1,0 +1,22 @@
+#mapCheckout {
+  width: 100%;
+  height: 300px;
+}
+
+.mapboxgl-ctrl-geocoder {
+  position: relative;
+  box-shadow: none;
+  width: 100%;
+  max-width: none;
+}
+
+.mapboxgl-ctrl-geocoder--input[name='shippingLocation'] {
+  height: 20px;
+  left: 0;
+  padding: 0;
+}
+
+.mapboxgl-ctrl-geocoder--input:focus {
+  background-color: #f9fafb;
+  box-shadow: none;
+}
