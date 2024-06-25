@@ -4,13 +4,20 @@ import { ApiUser } from '../api/User'
 import { Auth } from '../api/Auth'
 import AuthReducer from './slices/Auth.slice'
 import storage from 'redux-persist/lib/storage'
+import { productReducer } from './slices/product.slice'
 const persistConfig = {
   key: 'root',
   version: 1,
   storage,
   whitelist: ['auth']
 }
+const productsPersistConfig = {
+  key: 'products',
+  storage,
+  blacklist: ['products']
+}
 const rootReducer = combineReducers({
+  products: persistReducer(productsPersistConfig, productReducer),
   auth: AuthReducer
 })
 const persistedReducer = persistReducer(persistConfig, rootReducer)
