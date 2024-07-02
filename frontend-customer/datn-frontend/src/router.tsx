@@ -7,6 +7,8 @@ import NotFound from './pages/Not-Found/NotFound'
 import Signin from './pages/Sign-in/Signin'
 import Signup from './pages/Sign-up/Signup'
 import { createBrowserRouter } from 'react-router-dom'
+import ClientLayout from './layouts/client'
+import ProductsPage from './pages/Products/Products'
 
 const routes = createBrowserRouter([
   {
@@ -31,7 +33,16 @@ const routes = createBrowserRouter([
       { path: 'change-password', element: <ChangePassword /> }
     ]
   },
-
+  {
+    path: '/products',
+    element: <ClientLayout />,
+    children: [
+      {
+        index: true,
+        element: <ProductsPage />
+      }
+    ]
+  },
   {
     path: '*',
     element: <NotFound />

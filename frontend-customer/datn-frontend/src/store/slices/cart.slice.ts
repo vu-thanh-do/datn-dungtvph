@@ -1,8 +1,8 @@
-import { CartItem, CartLists } from './types/cart.type'
 import { PayloadAction, createSlice } from '@reduxjs/toolkit'
 
 import { CartDBAPI } from '../../api/cartDB'
 import _ from 'lodash'
+import { CartItem, CartLists } from './types/cart.type'
 
 interface CartState {
   items: CartLists[]

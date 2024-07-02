@@ -8,6 +8,8 @@ import { FaBars } from 'react-icons/fa'
 import { IQueryConfig } from '../../hook/useQueryConfig'
 import { ICategory } from '../../interfaces/category.type'
 import NotFound from '../../pages/Not-Found/NotFound'
+import { getIdCate } from '../../store/slices/categories'
+import { savePage } from '../../store/slices/product.slice'
 import SKProduct from '../Skeleton/SKProduct'
 
 interface SidebarCateProps {
@@ -22,6 +24,7 @@ const SidebarCate = ({ categories, error, isLoading }: SidebarCateProps) => {
   const dispatch = useAppDispatch()
   const [selectedCategory, setSelectedCategory] = useState('')
 
+  const { products } = useAppSelector((state) => state.persistedReducer.products)
 
   const handleClick = (event: any) => {
     setAnchorEl(event.currentTarget)
@@ -57,6 +60,7 @@ const SidebarCate = ({ categories, error, isLoading }: SidebarCateProps) => {
           >
             <div
               onClick={() => {
+                dispatch(getIdCate(''))
                 setSelectedCategory('')
               }}
               className={`cursor-pointer hover:bg-gray-100 transition-all duration-300 px-[16px] flex justify-between border border-transparent border-b-[#f1f1f1] py-[8px] last:border-none ${
@@ -83,6 +87,8 @@ const SidebarCate = ({ categories, error, isLoading }: SidebarCateProps) => {
               >
                 <div
                   onClick={() => {
+                    dispatch(getIdCate({ idCate: category._id, nameCate: category.name }))
+                    dispatch(savePage(1))
                     setSelectedCategory(category._id)
                   }}
                   className={`cursor-pointer hover:bg-gray-100 transition-all duration-300 px-[16px] flex justify-between border border-transparent  border-b-[#f1f1f1] py-[8px] last:border-none ${
@@ -91,6 +97,7 @@ const SidebarCate = ({ categories, error, isLoading }: SidebarCateProps) => {
                 >
                   <div className='cat-name capitalize'>{category.name}</div>
                   <div className='cat-amount text-[#8a733f]'>
+                    {products && products?.docs?.filter((item) => item.category._id == category._id).length}
                   </div>
                 </div>
               </div>
@@ -147,6 +154,7 @@ const SidebarCate = ({ categories, error, isLoading }: SidebarCateProps) => {
                       </Typography>
                     </Fragment>
                   }
+                  onClick={() => dispatch(getIdCate(''))}
                 />
               </ListItem>
               <Divider sx={{ marginLeft: '16px' }} />
@@ -171,6 +179,7 @@ const SidebarCate = ({ categories, error, isLoading }: SidebarCateProps) => {
                           </Typography>
                         </Fragment>
                       }
+                      onClick={() => dispatch(getIdCate({ idCate: category._id, nameCate: category.name }))}
                     />
                   </ListItem>
                   <Divider sx={{ marginLeft: '16px' }} />
