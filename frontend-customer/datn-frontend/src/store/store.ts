@@ -15,7 +15,7 @@ import { ApiProducts } from '../api/Product'
 import { ToppingAPI } from '../api/topping'
 import ApiVoucher from '../api/voucher'
 import BannerApi from '../api/banner'
-
+import StripeApi from '../api/paymentstripe'
 const persistConfig = {
   key: 'root',
   version: 1,
@@ -35,7 +35,6 @@ const rootReducer = combineReducers({
   order: orderReducer
 })
 const persistedReducer = persistReducer(persistConfig, rootReducer)
-
 const middleware = [
   ApiUser.middleware,
   Auth.middleware,
@@ -46,6 +45,7 @@ const middleware = [
   ToppingAPI.middleware,
   ApiVoucher.middleware,
   BannerApi.middleware,
+  StripeApi.middleware,
 ]
 export const store = configureStore({
   reducer: {
@@ -60,7 +60,7 @@ export const store = configureStore({
     [CartDBAPI.reducerPath]: CartDBAPI.reducer,
     [OrderAPI.reducerPath]: OrderAPI.reducer,
     [BannerApi.reducerPath]: BannerApi.reducer,
-
+    [StripeApi.reducerPath]: StripeApi.reducer,
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({

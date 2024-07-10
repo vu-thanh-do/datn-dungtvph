@@ -4,10 +4,18 @@ import VoucherFeature from '~/features/Voucher/Voucher'
 import Loading from '~/components/Loading/Loading'
 
 const VoucherPage = () => {
+  const { isError: errorVoucher, isFetching: fetchingVoucher, data: voucherData } = useGetAllVouchersQuery(0)
 
+  if (errorVoucher || !voucherData) {
+    return <NotFound />
+  }
+  if (fetchingVoucher) {
+    return <Loading />
+  }
   return (
     <>
-      comming soon
+      {/* <VoucherFeature data={voucherData.data.docs} /> */}
+      <VoucherFeature />
     </>
   )
 }

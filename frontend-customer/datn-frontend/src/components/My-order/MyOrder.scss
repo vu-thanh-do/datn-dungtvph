@@ -1,0 +1,24 @@
+.list-cancel-reason {
+  .ant-radio-group-solid .ant-radio-button-wrapper-checked:not(.ant-radio-button-wrapper-disabled) {
+    color: #fff;
+    background: #d8b979;
+    border-color: #d8b979;
+  }
+
+  .ant-radio-group-solid .ant-radio-button-wrapper-checked:not(.ant-radio-button-wrapper-disabled):hover {
+    background: #d8b979;
+  }
+
+  .ant-radio-group-solid .ant-radio-button-wrapper-checked:not(.ant-radio-button-wrapper-disabled):hover::before {
+    background: #ffffff;
+  }
+
+  .ant-radio-group-large .ant-radio-button-wrapper:hover {
+    color: #ffffff;
+    background: #d8b979;
+  }
+
+  .ant-radio-group-solid .ant-radio-button-wrapper-checked:not(.ant-radio-button-wrapper-disabled):hover {
+    border-color: unset !important;
+  }
+}

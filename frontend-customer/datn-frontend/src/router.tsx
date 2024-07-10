@@ -9,6 +9,9 @@ import Signup from './pages/Sign-up/Signup'
 import { createBrowserRouter } from 'react-router-dom'
 import ClientLayout from './layouts/client'
 import ProductsPage from './pages/Products/Products'
+import Checkout from './pages/Checkout/Checkout'
+import PaymentResult from './pages/PaymentResult/PaymentResult'
+import MyOrder from './components/My-order'
 
 const routes = createBrowserRouter([
   {
@@ -30,7 +33,8 @@ const routes = createBrowserRouter([
     children: [
       { index: true, element: <MyInfor /> },
       { path: 'my-order/:id', element: <MyOrderDetail /> },
-      { path: 'change-password', element: <ChangePassword /> }
+      { path: 'change-password', element: <ChangePassword /> },
+      { path: 'my-order', element: <MyOrder /> },
     ]
   },
   {
@@ -40,6 +44,14 @@ const routes = createBrowserRouter([
       {
         index: true,
         element: <ProductsPage />
+      },
+      {
+        path: 'checkout',
+        element: <Checkout />
+      },
+      {
+        path: 'checkout/payment-result',
+        element: <PaymentResult />
       }
     ]
   },

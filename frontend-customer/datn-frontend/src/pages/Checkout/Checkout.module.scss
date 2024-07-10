@@ -1,0 +1,22 @@
+.container_radio {
+  display: block;
+  position: relative;
+  padding-left: 24px;
+  padding-top: 8px;
+  padding-bottom: 8px;
+  cursor: pointer;
+  font-size: 14px;
+  user-select: none;
+}
+.container_radio input:checked ~ .checkmark_radio {
+  background: #d8b979;
+}
+.checkmark_radio {
+  position: absolute;
+  top: calc(50% - 8px);
+  left: 0;
+  height: 16px;
+  width: 16px;
+  background-color: #eee;
+  border-radius: 50%;
+}

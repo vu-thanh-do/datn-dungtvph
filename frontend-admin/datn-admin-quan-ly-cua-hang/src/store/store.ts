@@ -60,7 +60,9 @@ const middlewares = [
   sliderApi.middleware,
   categoryBlogApi.middleware,
   notificationApi.middleware,
-  analyticApi.middleware
+  analyticApi.middleware, 
+
+  
 ]
 
 export const store = configureStore({
