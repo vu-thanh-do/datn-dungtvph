@@ -1,0 +1,28 @@
+@import url('https://fonts.googleapis.com/css2?family=Braah+One&display=swap');
+
+.category_menu_title {
+  font-size: 28px;
+  letter-spacing: 1.4px;
+  font-family: 'Braah One', sans-serif;
+  font-weight: 900;
+  color: #d3b673;
+  text-transform: uppercase;
+  margin-bottom: 32px;
+  margin-top: 35px;
+}
+
+.menu_category {
+  position: relative;
+  transform: border-bottom 0.2s ease-in-out;
+  border-bottom: none;
+  text-decoration: none;
+  font-size: 16px;
+  font-weight: 600;
+  line-height: 2.56;
+  text-align: left;
+  color: #282828;
+  text-transform: uppercase;
+}
+.menu_category:hover {
+  text-decoration: underline 2px;
+}

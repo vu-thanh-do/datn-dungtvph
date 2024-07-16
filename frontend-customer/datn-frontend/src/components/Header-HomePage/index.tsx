@@ -6,12 +6,14 @@ import { Link } from 'react-router-dom'
 import { MdKeyboardArrowDown } from 'react-icons/md'
 import { RootState } from '../../store/store'
 import styles from './HeaderHomePage.module.scss'
+import { useGetAllBlogCategoryQuery } from '../../api/NewBlogs'
 import { useSelector } from 'react-redux'
 
 const HeaderHomePage = () => {
   const [isHeaderFixed, setHeaderFixed] = useState(false)
   const [fetchUser] = Auth.endpoints.fetchUser.useLazyQuery()
   const { user } = useSelector((state: RootState) => state.persistedReducer.auth)
+  const { data: blogCategories } = useGetAllBlogCategoryQuery()
 
   useEffect(() => {
     const handleScroll = () => {
@@ -100,6 +102,29 @@ const HeaderHomePage = () => {
                     <MdKeyboardArrowDown className='text-[20px]' />
                   </div>
                   <ul className='sub-menu absolute w-0 hidden bg-gray-800 text-white py-2 px-4 transition duration-300 group-hover:block group-hover:w-[200px] '>
+                    {blogCategories &&
+                      blogCategories?.docs.length > 0 &&
+                      blogCategories?.docs?.map((item: any, index: number) => {
+                        return (
+                          <div key={index}>
+                            <li>
+                              <Link
+                                to={`/blogs/category/${item?._id}`}
+                                className='block py-1 max-w-[500px] hover:text-[#d3b673]'
+                              >
+                                {item?.name}
+                              </Link>
+                            </li>
+                            <hr
+                              className={`bg-current mt-[5px] mb-[5px] ${
+                                blogCategories && blogCategories?.docs[blogCategories.docs.length - 1]._id === item._id
+                                  ? 'hidden'
+                                  : ''
+                              } `}
+                            />
+                          </div>
+                        )
+                      })}
 
                     {/* <li>
                       <Link

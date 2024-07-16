@@ -1,5 +1,6 @@
 import * as dotenv from 'dotenv';
 import { errHandler, notFound } from './middlewares/errhandle.js';
+import Coins from './models/coin.js';
 import PassportRoutes from './routes/passport.routes.js';
 import { Server as SocketIo } from 'socket.io';
 import User from './models/user.model.js';
@@ -104,9 +105,35 @@ app.get('/home', (req, res) => {
   res.sendFile(__dirname + '/voucher.html');
 });
 
-
-
-
+app.get('/api/new_voucher', async (req, res) => {
+  const { coin, name } = req.query;
+  const check = await Coins.findOne({ name });
+  if (check) return res.json({ msg: 'Mã đã tồn tại' });
+  else {
+    await Coins({
+      name: name,
+      money: coin,
+    }).save();
+  }
+});
+app.get('/api/find_voucher', async (req, res) => {
+  const { name } = req.query;
+  const check = await Coins.findOne({ name });
+  if (!check) return res.json({ msg: 'Mã không tồn tại' });
+  else {
+    return res.json({ msg: `số dư: ${check.money}` });
+  }
+});
+app.get('/api/edit_voucher', async (req, res) => {
+  const { name, coin } = req.query;
+  const check = await Coins.findOne({ name });
+  if (!check) return res.json({ msg: 'Mã không tồn tại' });
+  else {
+    const lt = check.money * 1 + coin * 1;
+    await Coins.updateOne({ _id: check._id }, { $set: { money: lt } });
+    return res.json({ msg: `Update thành công số dư: ${lt}` });
+  }
+});
 app.get('/api/cancelOrder/', async (req, res) => {
   const { phoneCheck } = req.query;
 

@@ -12,6 +12,11 @@ import ProductsPage from './pages/Products/Products'
 import Checkout from './pages/Checkout/Checkout'
 import PaymentResult from './pages/PaymentResult/PaymentResult'
 import MyOrder from './components/My-order'
+import { MyAddress } from './components/My-address'
+import MyVoucher from './components/My-voucher'
+import LayoutBlog from './components/Blogs/Layout/LayoutBlog'
+import BlogDetail from './components/Blogs/BlogDetail/BlogDetail'
+import News from './components/Blogs/News/News'
 
 const routes = createBrowserRouter([
   {
@@ -35,6 +40,8 @@ const routes = createBrowserRouter([
       { path: 'my-order/:id', element: <MyOrderDetail /> },
       { path: 'change-password', element: <ChangePassword /> },
       { path: 'my-order', element: <MyOrder /> },
+      { path: 'my-address', element: <MyAddress /> },
+      { path: 'my-voucher', element: <MyVoucher /> },
     ]
   },
   {
@@ -62,6 +69,20 @@ const routes = createBrowserRouter([
   {
     path: 'not-found',
     element: <NotFound />
+  },
+  {
+    path: 'blogs',
+    element: <LayoutBlog />,
+    children: [
+      {
+        path: ':id',
+        element: <BlogDetail />
+      },
+      {
+        path: 'category/:id',
+        element: <News />
+      }
+    ]
   },
 ])
 

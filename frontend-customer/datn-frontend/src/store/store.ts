@@ -16,6 +16,10 @@ import { ToppingAPI } from '../api/topping'
 import ApiVoucher from '../api/voucher'
 import BannerApi from '../api/banner'
 import StripeApi from '../api/paymentstripe'
+import { addressApi } from './services'
+import NewBlogsApi from '../api/NewBlogs'
+import VnpayApi from '../api/paymentvnpay'
+
 const persistConfig = {
   key: 'root',
   version: 1,
@@ -46,6 +50,9 @@ const middleware = [
   ApiVoucher.middleware,
   BannerApi.middleware,
   StripeApi.middleware,
+  addressApi.middleware,
+  NewBlogsApi.middleware,
+  VnpayApi.middleware,
 ]
 export const store = configureStore({
   reducer: {
@@ -56,11 +63,15 @@ export const store = configureStore({
     [ToppingAPI.reducerPath]: ToppingAPI.reducer,
     [ApiVoucher.reducerPath]: ApiVoucher.reducer,
     // [RoleApi.reducerPath]: RoleApi.reducer,
+
     [CategoryApi.reducerPath]: CategoryApi.reducer,
     [CartDBAPI.reducerPath]: CartDBAPI.reducer,
     [OrderAPI.reducerPath]: OrderAPI.reducer,
     [BannerApi.reducerPath]: BannerApi.reducer,
+    [addressApi.reducerPath]: addressApi.reducer,
     [StripeApi.reducerPath]: StripeApi.reducer,
+    [NewBlogsApi.reducerPath]: NewBlogsApi.reducer,
+    [VnpayApi.reducerPath]: VnpayApi.reducer,
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({

@@ -1,0 +1,18 @@
+#map {
+  display: none;
+}
+
+.mapboxgl-ctrl-geocoder--input[name='address'] {
+  left: 0;
+  border: 1px solid rgb(212, 211, 211);
+  font-size: 14px;
+  color: black;
+  border-radius: 8px;
+  padding: 18px !important;
+}
+
+.mapboxgl-ctrl-geocoder--input:focus {
+  background-color: #f9fafb;
+  box-shadow: none;
+  color: black;
+}
