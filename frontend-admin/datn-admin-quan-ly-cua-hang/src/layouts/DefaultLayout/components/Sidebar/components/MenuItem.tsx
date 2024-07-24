@@ -1,4 +1,4 @@
-import { BarChartOutlined, ShoppingOutlined, UserOutlined } from '@ant-design/icons'
+import { BarChartOutlined, MessageOutlined, ShoppingOutlined, UserOutlined } from '@ant-design/icons'
 import { AiOutlineControl, AiOutlineFontSize } from 'react-icons/ai'
 import { BiCategoryAlt, BiSolidCategoryAlt } from 'react-icons/bi'
 import { FaClipboardList, FaImages, FaRegNewspaper, FaUserEdit, FaUserFriends } from 'react-icons/fa'
@@ -49,7 +49,8 @@ export const items: MenuProps['items'] = [
   getItem('Người dùng', 'users', <UserOutlined />, [
     getItem(<NavLink to={`/manager/customers`}>Khách hàng</NavLink>, 'customers', <FaUserFriends />),
     getItem(<NavLink to={`/manager/staffs`}>Nhân viên</NavLink>, 'staffs', <FaUserEdit />)
-  ])
+  ]),
+  getItem(<NavLink to={`/message`}>Chăm sóc khách hàng</NavLink>, 'cskh', <MessageOutlined />)
 
   // getItem(<NavLink to={`/settings`}>Cài đặt</NavLink>, 'settings', <SettingOutlined />)
 ]
@@ -68,7 +69,9 @@ export const itemsStaff: MenuProps['items'] = [
     getItem(<NavLink to={`/manager/category-blog`}>Danh mục bài viết</NavLink>, 'category-blog', <BiCategoryAlt />),
     getItem(<NavLink to={`/manager/blogs`}>Bài viết</NavLink>, 'blogs', <FaRegNewspaper />),
     getItem(<NavLink to={`/manager/sliders`}>Sliders</NavLink>, 'sliders', <FaImages />)
-  ])
+  ]) ,
+  getItem(<NavLink to={`/message`}>Chăm sóc khách hàng</NavLink>, 'cskh', <MessageOutlined />)
+
 
   // quản lý người dùng
   // getItem('Người dùng', 'users', <UserOutlined />, [

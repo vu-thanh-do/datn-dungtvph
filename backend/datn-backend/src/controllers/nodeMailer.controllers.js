@@ -2,6 +2,7 @@ import nodemailer from 'nodemailer';
 import * as dotenv from 'dotenv';
 dotenv.config();
 export const sendEmailOrder = async (data) => {
+  console.log(data);
   const transporter = nodemailer.createTransport({
     service: 'gmail',
     auth: {
@@ -12,6 +13,7 @@ export const sendEmailOrder = async (data) => {
       rejectUnauthorized: false,
     },
   });
+
   const info = await transporter.sendMail({
     from: '"Hey 🙋🏻‍♂️" <milktea@gmail.com>',
     subject: data.subject,

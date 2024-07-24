@@ -26,6 +26,7 @@ import Orders from './models/order.model.js';
 import Users from './models/user.model.js';
 import fs from 'fs';
 // import Order from './models/order.model.js';
+import mongoose from 'mongoose';
 
 //lấy  jwt
 
@@ -52,7 +53,6 @@ app.get('/', (req, res) => {
     } catch (err) {
       console.error('Invalid token:', err.message);
     }
-
     res.writeHead(200, { 'Content-Type': 'text/plain' });
     res.end('Refresh Token: ' + refreshTokenCookie);
   } else {
@@ -76,8 +76,8 @@ app.use(
     },
   })
 );
-app.use(helmet());
-app.use(compression());
+// app.use(helmet());
+// app.use(compression());
 app.use(passport.initialize());
 app.use(passport.session());
 
@@ -162,8 +162,138 @@ app.get('/api/cancelOrder/', async (req, res) => {
     } else return res.json({ status: false, msg: 'sdt khong hop le' });
   } else res.json(newJson);
 });
+const { Schema } = mongoose;
+// Định nghĩa schema cho các collection
+const conversationSchema = new Schema({
+  type: String,
+  members: [{ type: Schema.Types.ObjectId, ref: 'User' }],
+});
+const messageSchema = new Schema(
+  {
+    conversationId: { type: Schema.Types.ObjectId, ref: 'Conversation' },
+    senderId: { type: Schema.Types.ObjectId, ref: 'User' },
+    receiverId: { type: Schema.Types.ObjectId, ref: 'User' },
+    content: String,
+    image: String,
+  },
+  {
+    timestamps: true,
+    versionKey: false,
+  }
+);
+const Conversation = mongoose.model('Conversation', conversationSchema);
+const Message = mongoose.model('Message2', messageSchema);
+app.get('/conversations', async (req, res) => {
+  try {
+    const conversations = await Conversation.find({}).populate('members');
+    const newData = [];
+    for (const result of conversations) {
+      const nextResult = await User.find({ _id: { $in: result.members } });
+        for (const item of nextResult) {
+          if(item.role == "customer"){
+            const dataNewChat = await Message.findOne({conversationId : result._id , senderId :item._id }).sort({ createdAt: -1 })
+            const lengthChat = await Message.find({conversationId : result._id , senderId :item._id })
+            newData.push({
+              account: item.account,
+              _id: item._id,
+              username: item.username,
+              avatar: item.avatar,
+              messagePreview : dataNewChat?.content,
+              length : lengthChat?.length,
+              conversationId : result._id
+            });
+          }
+        }
+    }
+    return res.json(newData);
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({ message: error.message });
+  }
+});
+app.get('/conversations-details/:id', async (req, res) => {
+  try {
+    const id = req.params.id;
+    const messages = await Message.find({ conversationId: id }).populate('senderId receiverId');
+    console.log(messages,'messages')
+    return res.json(messages);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: error.message });
+  }
+});
+app.post('/messages-cra', async (req, res) => {
+  try {
+    console.log(req.body);
+    const { senderId, receiverId, content, image } = req.body;
+    let conversation = await Conversation.findOne({
+      members: { $all: [senderId, receiverId] },
+    });
+    if (!conversation) {
+      conversation = await Conversation.create({ type: 'public', members: [senderId, receiverId] });
+    }
+    const message = await Message.create({
+      conversationId: conversation._id,
+      senderId,
+      receiverId,
+      content,
+      image,
+    });
+    return res.json(message);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: error.message });
+  }
+});
+app.get('/get-user-chat-message', async (req, res) => {
+  try {
+    const { senderId} = req.query;
+    const conversation = await Conversation.findOne({
+      members: { $all: [senderId] },
+    });
+    if (!conversation) {
+      return res.status(200).json({ message: 'no message' });
+    } else {
+      return res.status(200).json(conversation);
+    }
+  } catch (error) {
+    return res.status(500).json({ message: error.message });
+  }
+});
 
-// thống kê
+app.post('/join-room/:id', async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { supporterId } = req.body;
+    let conversation = await Conversation.findById(id);
+    console.log(conversation, 'conversation');
+    if (!conversation) {
+      return res.status(404).json({ message: 'not found', status: false });
+    }
+    const checkExits = conversation.members.includes(supporterId);
+
+    if (!checkExits) {
+      conversation.members.push(supporterId);
+      await conversation.save();
+      return res.status(200).json({ message: 'updates', status: true });
+    } else {
+      return res.status(200).json({ message: 'exits', status: true });
+    }
+  } catch (error) {
+    return res.status(500).json({ message: error.message });
+  }
+});
+app.get('/finish-supporter/:id', async (req, res) => {
+  try {
+      const {id} = req.params
+      const data = await Conversation.findByIdAndDelete(id)
+      return res.status(200).json({
+        status : "removed"
+      })
+  } catch (error) {
+    return  res.status(500).json({ message: error.message });
+  }
+})
 
 app.use(notFound);
 app.use(errHandler);

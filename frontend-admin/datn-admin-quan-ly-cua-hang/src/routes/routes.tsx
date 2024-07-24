@@ -20,6 +20,7 @@ import { GuardAccount } from '.'
 import SignIn from '~/pages/SignIn'
 import { createBrowserRouter } from 'react-router-dom'
 import ChangePassword from '~/pages/ChangePass'
+import Mesage from '~/pages/Mesage'
 
 const routers = createBrowserRouter([
   {
@@ -35,6 +36,10 @@ const routers = createBrowserRouter([
         children: [{ index: true, element: <Dashboard /> }]
       }
     ]
+  },
+  {
+    path:'/message',
+    element:<Mesage/>
   },
   {
     path: '/manager',

@@ -57,6 +57,7 @@ export default (io) => {
         );
         // io.to(data.idUser).emit('server:sendNotification', createData.data);
         if (data.to === 'user') {
+          console.log(createData.data.idUser,'user already')
           await getUnReadNotificationByIdUser(createData.data.idUser);
         }
         if (data.to === 'admin') {
@@ -88,6 +89,7 @@ export default (io) => {
         await axios
           .get(`${process.env.HTTP}/api/get-notifications-unread-by-id-user/${idUser}`)
           .then((res) => {
+            console.log(res,'res');
             io.to(idUser).emit('server:loadUnreadNotificationByidUser', res['data']);
           });
       } catch (error) {

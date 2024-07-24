@@ -7,17 +7,21 @@ import { RootState } from '../../store/store'
 import { useSelector } from 'react-redux'
 import { useAppDispatch } from '../../store/hooks'
 import useQueryConfig from '../../hook/useQueryConfig'
+import { getAllProducts } from '../../store/services/product.service'
 import { useForm } from 'react-hook-form'
 import { RoleSchema } from '../../validate/Form'
 import { yupResolver } from '@hookform/resolvers/yup'
 import './Header.scss'
+import { ClientSocket } from '../../socket'
+import { useUpdateNotifitoReadByidMutation } from '../../api/notifications'
 
 const Header = () => {
   const dispatch = useAppDispatch()
   const queryConfig = useQueryConfig()
   const [notification, setNotification] = useState<any[]>([])
   const { user } = useSelector((state: RootState) => state.persistedReducer.auth)
-
+  const [updateNotification] = useUpdateNotifitoReadByidMutation()
+  console.log(notification,'notification')
   const { register, handleSubmit } = useForm({
     defaultValues: {
       name: ''
@@ -25,7 +29,13 @@ const Header = () => {
     resolver: yupResolver(RoleSchema)
   })
 
-
+  const handleUpdateNotification = (id: string) => {
+    updateNotification(id)
+      .unwrap()
+      .then(() => {
+        ClientSocket.getUnreadNotificationsByidUser(setNotification, user._id!)
+      })
+  }
 
   const navigate = useNavigate()
 
@@ -38,6 +48,20 @@ const Header = () => {
       }).toString()
     })
   })
+  useEffect(() => {
+    dispatch(
+      getAllProducts({
+        page: queryConfig._page,
+        limit: queryConfig.limit,
+        query: queryConfig.searchName,
+        category: queryConfig.c == 'all' ? '' : queryConfig.c
+      })
+    )
+  }, [dispatch, queryConfig._page, queryConfig.c, queryConfig.limit, queryConfig.searchName])
+
+  useEffect(() => {
+    ClientSocket.getUnreadNotificationsByidUser(setNotification, user._id!)
+  }, [user._id])
 
   return (
     <div className='header flex items-center justify-between gap-2 px-4 py-2 select-none sticky top-0 w-full bg-white z-10'>
@@ -80,7 +104,9 @@ const Header = () => {
                       >
                         <span className='inline-block w-[10px] h-[10px] bg-[#d3b673] rounded-full group-hover:bg-white'></span>
                         <Link
-
+                          onClick={() => {
+                            handleUpdateNotification(item._id)
+                          }}
                           className='group-hover:!text-white block'
                           // target='_blank'
                           // rel='noopener noreferrer'

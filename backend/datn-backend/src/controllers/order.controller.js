@@ -95,7 +95,7 @@ export const orderController = {
         subject: 'cảm ơn bạn đã đặt hàng tại Trà sữa Connect',
       };
       
-      // await sendEmailOrder(dataEmail);
+      await sendEmailOrder(dataEmail);
       const cart = await Cart.deleteMany({
         user: order.user,
       });
@@ -262,7 +262,7 @@ export const orderController = {
        `,
     };
 
-    // await sendEmailOrder(dataEmail);
+    await sendEmailOrder(dataEmail);
 
     return updateState;
   },
@@ -341,7 +341,7 @@ export const orderController = {
         subject: 'cảm ơn bạn đã đặt hàng tại Trà sữa Connect',
       };
 
-      // await sendEmailOrder(dataEmail1);
+      await sendEmailOrder(dataEmail1);
       return res.status(200).json({ message: 'canceled order successfully', order: orderCanceled });
     } catch (error) {
       return res.status(500).json({ error: error.message });
