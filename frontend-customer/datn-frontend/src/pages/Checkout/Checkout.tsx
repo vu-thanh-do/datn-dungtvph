@@ -186,13 +186,11 @@ const Checkout = () => {
           name: data.name,
           email: data.email,
           phone: data.phone,
-          address: data.shippingLocation,
+          address: data.shippingLocation as string,
           noteShipping: data.shippingNote == '' ? ' ' : data.shippingNote
         }
       }
-
       dispatch(saveFormOrder(dataForm))
-
       if (Number(dataForm.total) <= 5000) {
         message.error('Đơn hàng phải lớn hơn 5 nghìn', 2)
       } else {
@@ -212,6 +210,17 @@ const Checkout = () => {
                 window.location.href = res.order.url
               }
             })
+            .catch((error: any) => {
+              if (error.status == 400 && error.data.error_s == 'blocked') {
+                console.log(error)
+                toast.error('Tài khoản của bạn bị khóa do spam quá nhiều')
+                setTimeout(() => {
+                  localStorage.clear()
+                  window.location.reload()
+                  navigate('/signin')
+                }, 1500)
+              }
+            })
         } else if (data.paymentMethod == 'vnpay') {
           vnpayPayment(dataForm)
             .unwrap()
@@ -219,7 +228,17 @@ const Checkout = () => {
               window.location.href = url
             })
             .catch((err) => {
+              console.log(err, 'errerr')
               toast.error(err.data.message)
+              if (err.status == 400 && err.data.error_s == 'blocked') {
+                console.log(err)
+                toast.error('Tài khoản của bạn bị khóa do spam quá nhiều')
+                setTimeout(() => {
+                  localStorage.clear()
+                  window.location.reload()
+                  navigate('/signin')
+                }, 1500)
+              }
             })
         }
       }

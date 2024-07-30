@@ -75,6 +75,7 @@ export const FormCustomer = ({ open }: FormCustomerProps) => {
           updateUser({
             gender: values.gender,
             username: values.username,
+            status : values.status,
             avatar: urls[0].url,
             _id: userData._id
           })
@@ -185,7 +186,20 @@ export const FormCustomer = ({ open }: FormCustomerProps) => {
             <Input type='email' size='large' placeholder='Tài khoản' />
           </Form.Item>
         )}
-
+        {userData._id && (
+          <Form.Item className='dark:text-white' label='Trạng thái' name='status'>
+            <Select
+              className='w-full'
+              size='large'
+              // onChange={handleChange}
+              placeholder='Khóa'
+              options={[
+                { value: 'active', label: 'active' },
+                { value: 'inActive', label: 'inActive' }
+              ]}
+            />
+          </Form.Item>
+        )}
         {!userData._id && (
           <Form.Item
             className='dark:text-white'

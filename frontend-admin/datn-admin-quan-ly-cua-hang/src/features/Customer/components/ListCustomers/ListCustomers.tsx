@@ -151,6 +151,19 @@ export const ListCustomers = () => {
       render: (avatar: string) => <Image className='!w-[100px] !h-[100px]' src={avatar} />
     },
     {
+      title: 'Trạng thái',
+      dataIndex: 'status',
+      key: 'status',
+      render: (avatar: string) => (
+        <p
+          className={`${avatar == 'active' ? 'bg-green text-black rounded-md pl-3 font-medium ' : 'bg-red text-black rounded-md pl-3 font-medium'}`}
+        >
+          {' '}
+          {avatar == 'active' ? 'Hoạt động' : 'Đã khóa'}{' '}
+        </p>
+      )
+    },
+    {
       title: 'Họ tên',
       dataIndex: 'username',
       key: 'username',

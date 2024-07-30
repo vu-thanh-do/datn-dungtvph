@@ -21,6 +21,7 @@ import SignIn from '~/pages/SignIn'
 import { createBrowserRouter } from 'react-router-dom'
 import ChangePassword from '~/pages/ChangePass'
 import Mesage from '~/pages/Mesage'
+import HardAnalytics from '~/features/Dashboard/HardAnalytics'
 
 const routers = createBrowserRouter([
   {
@@ -33,13 +34,16 @@ const routers = createBrowserRouter([
     children: [
       {
         element: <GuardAccount JSX={DefaultLayout} />,
-        children: [{ index: true, element: <Dashboard /> }]
+        children: [
+          { index: true, element: <Dashboard /> },
+          { path: 'hard', element: <HardAnalytics /> }
+        ]
       }
     ]
   },
   {
-    path:'/message',
-    element:<Mesage/>
+    path: '/message',
+    element: <Mesage />
   },
   {
     path: '/manager',

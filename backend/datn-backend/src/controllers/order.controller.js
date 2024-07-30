@@ -7,6 +7,8 @@ import Voucher from '../models/voucher.model.js';
 import { orderValidate } from '../validates/order.validate.js';
 import { sendEmailOrder } from './nodeMailer.controllers.js';
 import Enviroment from '../utils/checkEnviroment.js';
+import axios from 'axios';
+import { response } from 'express';
 dotenv.config();
 
 export const orderController = {
@@ -22,100 +24,109 @@ export const orderController = {
         price: body?.moneyPromotion?.price,
         voucherId: body?.moneyPromotion?.voucherId,
       };
-      const encodeStripe = generatePaymentToken(note);
-      /* validate */
-      const { error } = orderValidate.validate(body, { abortEarly: false });
-      if (error) {
-        return res.status(400).json({ error: error.message });
-      }
+      const checkSpamPhone = await axios.get(
+        'http://localhost:8000/api/cancelOrder?phoneCheck=' + body.inforOrderShipping.phone
+      );
+      if (checkSpamPhone.data.status == true) {
+        const encodeStripe = generatePaymentToken(note);
+        /* validate */
+        const { error } = orderValidate.validate(body, { abortEarly: false });
+        if (error) {
+          return res.status(400).json({ error: error.message });
+        }
 
-      const items = body.items;
-      /* tính tổng tiền của đơn hàng người dùng vừa đặt */
-      let total = 0;
-      items.forEach((item) => {
-        total += item.quantity * item.price;
-        /* nếu mà sản phẩm có topping */
-        if (item.toppings.length > 0 && item.toppings) {
-          item.toppings.forEach((topping) => {
-            total += topping.price;
+        const items = body.items;
+        /* tính tổng tiền của đơn hàng người dùng vừa đặt */
+        let total = 0;
+        items.forEach((item) => {
+          total += item.quantity * item.price;
+          /* nếu mà sản phẩm có topping */
+          if (item.toppings.length > 0 && item.toppings) {
+            item.toppings.forEach((topping) => {
+              total += topping.price;
+            });
+          }
+        });
+        let totalAll = 0;
+        const priceShipping = Number(body.priceShipping) || 0;
+        // check _id or phone user
+        const userUsedVoucher = body.inforOrderShipping.phone;
+        // check voucher đã đc dùng hay chưa
+        if (body?.moneyPromotion?.voucherId) {
+          const checkVoucher = await Voucher.findById({ _id: body.moneyPromotion.voucherId });
+
+          if (!checkVoucher) {
+            return res.status(400).json({ error: 'Không tìm thấy mã voucher' });
+          }
+
+          if (checkVoucher.discount == 0) {
+            return res.status(400).json({ error: 'Voucher đã hết lượt dùng!' });
+          }
+          const exitUser = checkVoucher.user_used.includes(userUsedVoucher);
+          if (exitUser) {
+            return res.status(400).json({ error: 'Đã hết lượt dùng Voucher' });
+          }
+
+          checkVoucher?.user_used.push(userUsedVoucher);
+          checkVoucher.discount--;
+          await checkVoucher.save();
+
+          const moneyPromotion = body.moneyPromotion?.price ? body.moneyPromotion?.price : 0;
+          const totalPricePr = total + priceShipping - Number(moneyPromotion);
+          totalAll = totalPricePr <= 0 ? 0 : totalPricePr;
+        } else {
+          totalAll = total + priceShipping;
+        }
+
+        /* tạo đơn hàng mới */
+        const order = await Order.create({
+          ...body,
+          total: totalAll,
+          priceShipping: body.priceShipping,
+          is_active: true,
+          isPayment: ['vnpay', 'stripe'].includes(body.paymentMethodId) ? true : false,
+        });
+
+        const dataEmail = {
+          items,
+          statusOrder: 'Chờ xác nhận',
+          orderId: order._id,
+          payment: body.paymentMethodId,
+          createdAt: moment(new Date()).format(' HH:mm:ss ĐD-MM-YYYY'),
+          userInfo: body.inforOrderShipping,
+          priceShipping: body.priceShipping,
+          total: totalAll,
+          to: body.inforOrderShipping.email,
+          text: 'Hi!',
+          subject: 'cảm ơn bạn đã đặt hàng tại Trà sữa Connect',
+        };
+
+        // await sendEmailOrder(dataEmail);
+        const cart = await Cart.deleteMany({
+          user: order.user,
+        });
+
+        if (!cart) {
+          return res.status(200).json({
+            message: 'delete success',
+            data: cart,
           });
         }
-      });
-      let totalAll = 0;
-      const priceShipping = Number(body.priceShipping) || 0;
-      // check _id or phone user
-      const userUsedVoucher = body.inforOrderShipping.phone;
-      // check voucher đã đc dùng hay chưa
-      if (body?.moneyPromotion?.voucherId) {
-        const checkVoucher = await Voucher.findById({ _id: body.moneyPromotion.voucherId });
-
-        if (!checkVoucher) {
-          return res.status(400).json({ error: 'Không tìm thấy mã voucher' });
-        }
-
-        if (checkVoucher.discount == 0) {
-          return res.status(400).json({ error: 'Voucher đã hết lượt dùng!' });
-        }
-        const exitUser = checkVoucher.user_used.includes(userUsedVoucher);
-        if (exitUser) {
-          return res.status(400).json({ error: 'Đã hết lượt dùng Voucher' });
-        }
-
-        checkVoucher?.user_used.push(userUsedVoucher);
-        checkVoucher.discount--;
-        await checkVoucher.save();
-
-        const moneyPromotion = body.moneyPromotion?.price ? body.moneyPromotion?.price : 0;
-        const totalPricePr = total + priceShipping - Number(moneyPromotion);
-        totalAll = totalPricePr <= 0 ? 0 : totalPricePr;
-      } else {
-        totalAll = total + priceShipping;
-      }
-
-      /* tạo đơn hàng mới */
-      const order = await Order.create({
-        ...body,
-        total: totalAll,
-        priceShipping: body.priceShipping,
-        is_active: true,
-        isPayment: ['vnpay', 'stripe'].includes(body.paymentMethodId) ? true : false,
-      });
-
-      const dataEmail = {
-        items,
-        statusOrder: 'Chờ xác nhận',
-        orderId: order._id,
-        payment: body.paymentMethodId,
-        createdAt: moment(new Date()).format(' HH:mm:ss ĐD-MM-YYYY'),
-        userInfo: body.inforOrderShipping,
-        priceShipping: body.priceShipping,
-        total: totalAll,
-        to: body.inforOrderShipping.email,
-        text: 'Hi!',
-        subject: 'cảm ơn bạn đã đặt hàng tại Trà sữa Connect',
-      };
-      
-      await sendEmailOrder(dataEmail);
-      const cart = await Cart.deleteMany({
-        user: order.user,
-      });
-
-      if (!cart) {
+        const url = `${Enviroment()}/products/checkout/payment-result?encode=${encodeStripe}`;
         return res.status(200).json({
-          message: 'delete success',
-          data: cart,
+          message: 'create order successfully',
+          order: {
+            orderNew: order,
+            url,
+          },
+        });
+      } else {
+        return res.status(400).json({
+          status : false,
+          message:"Tài khoản của bạn bị khóa do hủy quá nhiều !",
+          error_s : "blocked",
         });
       }
-
-      const url = `${Enviroment()}/products/checkout/payment-result?encode=${encodeStripe}`;
-
-      return res.status(200).json({
-        message: 'create order successfully',
-        order: {
-          orderNew: order,
-          url,
-        },
-      });
     } catch (error) {
       return res.status(500).json({ error: error.message });
     }
@@ -262,7 +273,7 @@ export const orderController = {
        `,
     };
 
-    await sendEmailOrder(dataEmail);
+    // await sendEmailOrder(dataEmail);
 
     return updateState;
   },
@@ -341,7 +352,7 @@ export const orderController = {
         subject: 'cảm ơn bạn đã đặt hàng tại Trà sữa Connect',
       };
 
-      await sendEmailOrder(dataEmail1);
+      // await sendEmailOrder(dataEmail1);
       return res.status(200).json({ message: 'canceled order successfully', order: orderCanceled });
     } catch (error) {
       return res.status(500).json({ error: error.message });

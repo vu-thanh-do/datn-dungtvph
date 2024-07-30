@@ -4,6 +4,7 @@ import querystring from 'qs';
 import moment from 'moment';
 import Voucher from '../models/voucher.model.js';
 import Enviroment from '../utils/checkEnviroment.js';
+import axios from 'axios';
 dotenv.config();
 
 process.env.TZ = 'Asia/Ho_Chi_Minh';
@@ -27,6 +28,7 @@ function sortObject(obj) {
 const checkoutVnpay = {
   payment: async (req, res) => {
     try {
+
       const secretKey = process.env.VNP_HASHSECRET;
       let vnpUrl = process.env.VNP_URL;
       const ip =
@@ -34,9 +36,19 @@ const checkoutVnpay = {
         req.connection.remoteAddress ||
         req.socket.remoteAddress ||
         req.connection.socket.remoteAddress;
-
+      console.log(req.body.inforOrderShipping.phone,'req.body.inforOrderShipping.phone')
       const amount = req.body.total;
-
+      const checkSpamPhone = await axios.get(
+        'http://localhost:8000/api/cancelOrder?phoneCheck=' +req.body.inforOrderShipping.phone
+      );
+      if (checkSpamPhone.data.status != true){
+        console.log('1')
+        return res.status(400).json({
+          status : false,
+          message:"Tài khoản của bạn bị khóa do hủy quá nhiều !",
+          error_s : "blocked",
+        });
+      }
       if (req.body.moneyPromotion?.voucherId) {
         const userUsedVoucher = req.body.inforOrderShipping.phone;
         const checkVoucher = await Voucher.findById({ _id: req.body.moneyPromotion.voucherId });
@@ -78,7 +90,7 @@ const checkoutVnpay = {
       vnpUrl += '?' + querystring.stringify(vnp_Params, { encode: false });
       res.send({ url: vnpUrl });
     } catch (error) {
-      return res.status(500, { message: 'Error server' });
+      return res.status(500, { message: error.message });
     }
   },
 };

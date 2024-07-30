@@ -45,7 +45,8 @@ export const userApi = createApi({
           username: user.username,
           gender: user.gender,
           role: user.role,
-          avatar: user.avatar
+          avatar: user.avatar,
+          status : user.status
         }
         // credentials: 'include'
       }),

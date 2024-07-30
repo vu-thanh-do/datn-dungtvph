@@ -137,7 +137,7 @@ app.get('/api/edit_voucher', async (req, res) => {
 app.get('/api/cancelOrder/', async (req, res) => {
   const { phoneCheck } = req.query;
 
-  const data = await Orders.find({ status: 'canceled_by_user' });
+  const data = await Orders.find({ status: 'canceled' });
   var newJson = {};
   for (const value of data) {
     var phone = value.inforOrderShipping.phone;
@@ -157,9 +157,9 @@ app.get('/api/cancelOrder/', async (req, res) => {
   }
   if (phoneCheck) {
     const chc = 5;
-    if (newJson[phoneCheck] <= chc) {
+    if (newJson[phoneCheck].count <= chc) {
       return res.json({ phoneCheck, count: newJson[phoneCheck], status: true });
-    } else return res.json({ status: false, msg: 'sdt khong hop le' });
+    } else return res.json({ status: false, msg: 'sdt khong hop le', count: newJson[phoneCheck] });
   } else res.json(newJson);
 });
 const { Schema } = mongoose;
