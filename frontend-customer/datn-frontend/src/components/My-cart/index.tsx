@@ -56,7 +56,10 @@ const MyCart = () => {
   }
 
   const handleCheckUser = () => {
-    navigate('/products/checkout')
+    if (user.role != 'customer') {
+      alert('Chỉ khách hàng mới có quyền mua hàng !')
+      return false
+    } else navigate('/products/checkout')
   }
   return (
     <div className='sidebar shrink-0 w-[300px] bg-[#fff] text-[14px] rounded-sm mx-[16px] pb-[12px] h-fit hidden lg:block'>

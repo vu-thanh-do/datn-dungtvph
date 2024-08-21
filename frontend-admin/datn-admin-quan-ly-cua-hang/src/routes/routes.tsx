@@ -22,6 +22,7 @@ import { createBrowserRouter } from 'react-router-dom'
 import ChangePassword from '~/pages/ChangePass'
 import Mesage from '~/pages/Mesage'
 import HardAnalytics from '~/features/Dashboard/HardAnalytics'
+import ShowAnalitics from '~/components/Cart/CardThree/ShowAnalitics'
 
 const routers = createBrowserRouter([
   {

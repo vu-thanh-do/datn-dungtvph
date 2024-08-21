@@ -202,7 +202,7 @@ export const ListCustomers = () => {
                 }}
               />
             </Tooltip>
-            <Tooltip title='Xóa người dùng này'>
+            {/* <Tooltip title='Xóa người dùng này'>
               <Popconfirm
                 title='Bạn có muốn xóa khách hàng này?'
                 okButtonProps={{ style: { backgroundColor: '#3C50E0', color: '#fff' } }}
@@ -215,7 +215,7 @@ export const ListCustomers = () => {
                   icon={<BsFillTrashFill />}
                 />
               </Popconfirm>
-            </Tooltip>
+            </Tooltip> */}
           </Space>
         </div>
       )

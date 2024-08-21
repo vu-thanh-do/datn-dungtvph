@@ -74,6 +74,10 @@ const PopupDetailProduct = ({ showPopup, togglePopup, product }: PopupDetailProd
   }, [product])
 
   const handleAddToCart = () => {
+    if(user.role != "customer"){
+      alert("Chỉ khách hàng mới có quyền mua hàng !");
+      return false;
+    }
     togglePopup()
     const data = {
       name: product.name,
