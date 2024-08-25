@@ -17,6 +17,8 @@ import MyVoucher from './components/My-voucher'
 import LayoutBlog from './components/Blogs/Layout/LayoutBlog'
 import BlogDetail from './components/Blogs/BlogDetail/BlogDetail'
 import News from './components/Blogs/News/News'
+import ResetForgotPassword from './pages/Forgot-password/ResetForgotPassword'
+import ForgotPassword from './pages/Forgot-password/ForgotPassword'
 
 const routes = createBrowserRouter([
   {
@@ -31,7 +33,14 @@ const routes = createBrowserRouter([
     path: '/signup',
     element: <GuardSign JSX={Signup} />
   },
-
+{
+    path: '/forgot-password',
+    element: <ForgotPassword />
+  },
+  {
+    path: '/reset-forgot-password/:token',
+    element: <ResetForgotPassword />
+  },
   {
     path: '/account-layout',
     element: <GuardAccount JSX={AccountLayout} />,
